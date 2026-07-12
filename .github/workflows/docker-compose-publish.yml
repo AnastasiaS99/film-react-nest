@@ -45,7 +45,7 @@ jobs:
         id: meta-backend
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/film-backend
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/backend
 
       - name: Build and push backend
         uses: docker/build-push-action@v6
@@ -63,7 +63,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/film-frontend
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/frontend
 
       - name: Build and push frontend
         uses: docker/build-push-action@v6
@@ -81,13 +81,13 @@ jobs:
         id: meta-nginx
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/film-nginx
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_OWNER }}/nginx
 
       - name: Build and push nginx
         uses: docker/build-push-action@v6
         with:
-          context: ./nginx
-          file: ./nginx/Dockerfile
+          context: ./frontend/nginx
+          file: ./frontend/nginx/Dockerfile
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta-nginx.outputs.tags }}
