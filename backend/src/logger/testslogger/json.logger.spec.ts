@@ -1,10 +1,11 @@
 import { JsonLogger } from '../json.logger';
 
 describe('JsonLogger', () => {
+// Переменные для логера и моков
   let logger: JsonLogger;
   let consoleLogSpy: jest.SpyInstance;
   let consoleErrorSpy: jest.SpyInstance;
-
+// Новые экземпляры перед каждым тестом
   beforeEach(() => {
     logger = new JsonLogger();
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation();

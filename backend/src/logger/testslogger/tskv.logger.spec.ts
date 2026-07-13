@@ -1,9 +1,10 @@
 import { TskvLogger } from '../tskv.logger';
 
 describe('TskvLogger', () => {
+// Переменные для логера
   let logger: TskvLogger;
   let consoleLogSpy: jest.SpyInstance;
-
+// Новые экземпляры перед каждым тестом
   beforeEach(() => {
     logger = new TskvLogger();
     consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
