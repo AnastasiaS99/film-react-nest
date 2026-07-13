@@ -7,10 +7,10 @@ export class FilmsController {
 
   @Get()
   async findAll() {
-    const result = await this.filmsService.findAll(); // получаем результат
+    const result = await this.filmsService.findAll(); 
     return {
       ...result,
-      code: 200, // добавляем свойство `code`
+      code: 200, 
     };
   }
 
@@ -19,7 +19,7 @@ export class FilmsController {
     const schedule = await this.filmsService.findSchedule(id);
     return {
       ...schedule,
-      code: 200, // если захотите, тоже можно добавить сюда
+      code: 200, 
     };
   }
 }

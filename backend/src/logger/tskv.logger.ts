@@ -1,12 +1,13 @@
 import { Injectable, LoggerService } from '@nestjs/common';
 
 @Injectable()
+// Объявление класса
 export class TskvLogger implements LoggerService {
   private formatValue(value: string): string {
     if (!value) return '';
     return value.replace(/[\n\t]/g, ' ');
   }
-
+// Метод для преобразования произвольного значения в строку для логирования
   private toFieldString(value: unknown): string {
     if (typeof value === 'string') {
       return value;
@@ -20,7 +21,7 @@ export class TskvLogger implements LoggerService {
       return String(value);
     }
   }
-
+// Формирование финального сообщения для логирования
   formatMessage(level: string, message: any, ...optionalParams: any[]): string {
     const date = new Date().toISOString();
     const messageStr =
@@ -33,7 +34,7 @@ export class TskvLogger implements LoggerService {
 
     return result + '\n';
   }
-
+// Разные логи
   log(message: any, ...optionalParams: any[]) {
     console.log(this.formatMessage('log', message, ...optionalParams));
   }

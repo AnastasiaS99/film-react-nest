@@ -5,9 +5,10 @@ import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 
 describe('OrderController', () => {
+// Объявление переменных для мока
   let controller: OrderController;
   let service: jest.Mocked<Pick<OrderService, 'create'>>;
-
+// Настройка модуля тестирования
   beforeEach(async () => {
     const mockService: jest.Mocked<Pick<OrderService, 'create'>> = {
       create: jest.fn(),
@@ -21,7 +22,7 @@ describe('OrderController', () => {
     controller = module.get<OrderController>(OrderController);
     service = module.get<jest.Mocked<OrderService>>(OrderService);
   });
-
+// Тестовый случай
   describe('create', () => {
     it('должен вызвать сервис с правильными данными и вернуть результат', async () => {
       const tickets: TicketDto[] = [
