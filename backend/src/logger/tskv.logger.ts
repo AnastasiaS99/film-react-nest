@@ -3,11 +3,12 @@ import { Injectable, LoggerService } from '@nestjs/common';
 @Injectable()
 // Объявление класса
 export class TskvLogger implements LoggerService {
+
   private formatValue(value: string): string {
     if (!value) return '';
     return value.replace(/[\n\t]/g, ' ');
   }
-// Метод для преобразования произвольного значения в строку для логирования
+
   private toFieldString(value: unknown): string {
     if (typeof value === 'string') {
       return value;
@@ -21,11 +22,17 @@ export class TskvLogger implements LoggerService {
       return String(value);
     }
   }
-// Формирование финального сообщения для логирования
-  formatMessage(level: string, message: any, ...optionalParams: any[]): string {
+
+  private formatMessage(
+    level: string,
+    message: string | object | Error,
+    ...optionalParams: unknown[]
+  ): string {
     const date = new Date().toISOString();
     const messageStr =
-      typeof message === 'string' ? message : JSON.stringify(message);
+      typeof message === 'string'
+        ? message
+        : JSON.stringify(message);
     let result = `timestamp=${date}\tlevel=${level}\tmessage=${this.formatValue(messageStr)}`;
 
     optionalParams.forEach((param, index) => {
@@ -34,23 +41,28 @@ export class TskvLogger implements LoggerService {
 
     return result + '\n';
   }
-// Разные логи
-  log(message: any, ...optionalParams: any[]) {
+// Разные уровни логгирования
+  log(message: string | object | Error, ...optionalParams: unknown[]) {
     console.log(this.formatMessage('log', message, ...optionalParams));
   }
-  error(message: any, ...optionalParams: any[]) {
+// Ошибки
+  error(message: string | object | Error, ...optionalParams: unknown[]) {
     console.error(this.formatMessage('error', message, ...optionalParams));
   }
-  warn(message: any, ...optionalParams: any[]) {
+// Предупреждения
+  warn(message: string | object | Error, ...optionalParams: unknown[]) {
     console.warn(this.formatMessage('warn', message, ...optionalParams));
   }
-  debug(message: any, ...optionalParams: any[]) {
+// Отладка
+  debug(message: string | object | Error, ...optionalParams: unknown[]) {
     console.debug(this.formatMessage('debug', message, ...optionalParams));
   }
-  verbose(message: any, ...optionalParams: any[]) {
+// Расширенный лог
+  verbose(message: string | object | Error, ...optionalParams: unknown[]) {
     console.log(this.formatMessage('verbose', message, ...optionalParams));
   }
-  fatal(message: any, ...optionalParams: any[]) {
+// Критически важные ошибки
+  fatal(message: string | object | Error, ...optionalParams: unknown[]) {
     console.error(this.formatMessage('fatal', message, ...optionalParams));
   }
 }

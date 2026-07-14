@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
+    "strict": true, // Включает все строгие проверки, в том числе:
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
     "module": "commonjs",
-     "types": ["node", "jest"],
+    "types": ["node", "jest"],
     "declaration": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -13,9 +17,6 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false
   }

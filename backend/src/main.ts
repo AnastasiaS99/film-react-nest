@@ -3,18 +3,29 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import { join } from 'path';
 import { ValidationPipe } from '@nestjs/common';
-import { JsonLogger } from './logger/json.logger'; // укажите правильный путь
-import { TskvLogger } from './logger/tskv.logger'; // укажите правильный путь
-import { DevLogger } from './logger/dev.logger'; // укажите правильный путь
+import { ConfigService } from '@nestjs/config';
+
+// Импорт логгеров
+import { JsonLogger } from './logger/json.logger';
+import { TskvLogger } from './logger/tskv.logger';
+import { DevLogger } from './logger/dev.logger';
 
 async function main() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
   });
 
-  // Выбор логгера через переменную окружения LOG_FORMAT
-  const logFormat = process.env.LOG_FORMAT || 'dev';
+  const configService = app.get(ConfigService);
 
+  // Получение переменных окружения через ConfigService
+  const logFormat = configService.get<string>('LOG_FORMAT', 'dev');
+  const port = configService.get<number>('PORT', 3000);
+  const corsOrigin = configService.get<string>('CORS_ORIGIN', 'http://localhost:5173');
+
+  // Регистрация глобального ValidationPipe перед запуском сервера
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }));
+
+  // Настройка логов
   switch (logFormat) {
     case 'json':
       app.useLogger(new JsonLogger());
@@ -26,18 +37,15 @@ async function main() {
       app.useLogger(new DevLogger());
   }
 
-  // Основные настройки приложения
+  // Основные настройки
   app.setGlobalPrefix('api/afisha');
-  app.enableCors({ origin: 'http://localhost:5173', credentials: true });
+  app.enableCors({ origin: corsOrigin, credentials: true });
   app.useStaticAssets(join(__dirname, '..', 'public'), {
     prefix: '/content/afisha/',
   });
 
-  await app.listen(3000);
-  console.log('Сервер запущен');
-
-  // Глобальные пайпы
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+  await app.listen(port);
+  console.log(`Сервер запущен на порту ${port}`);
 }
 
 main();

@@ -28,14 +28,15 @@ services:
       - app-network
     depends_on:
       - backend
+    restart: always  
 
   db:
     image: postgres:13
     restart: always
     environment:
-      POSTGRES_DB: prac
-      POSTGRES_USER: prac
-      POSTGRES_PASSWORD: prac
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
     networks:
       - app-network
     ports:
@@ -54,14 +55,15 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     ports:
       - "8090:80"  
     networks:
       - app-network
     volumes:
       - pgadmin-data:/var/lib/pgadmin
+    restart: always
 
 networks:
   app-network:
